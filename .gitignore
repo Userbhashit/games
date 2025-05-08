@@ -1,0 +1,48 @@
+# macOS
+.DS_Store
+
+# Xcode
+*.xcworkspace
+*.xcuserdata
+*.xccheckout
+*.xcscmblueprint
+*.moved-aside
+DerivedData/
+build/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+
+# Swift Package Manager
+/.build
+/Packages
+.swiftpm
+Package.resolved
+
+# Cocoapods
+Pods/
+Podfile.lock
+
+# Carthage
+Carthage/Build/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+
+# Archives
+*.xcarchive
+
+# Simulator logs
+coreSimulatorLogs/
+
+# SwiftPM binary cache (if enabled)
+.swiftpm/xcode/package.cache
+
+# Xcode Preview canvas cache
+*.preview-thumbnails
+
+# Playgrounds
+timeline.xctimeline
+playground.xcworkspace
