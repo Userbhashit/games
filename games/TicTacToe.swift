@@ -10,9 +10,20 @@ import SwiftUI
 struct TicTacToe: View {
     
     @State private var board = [["", "", ""], ["", "", ""], ["", "", ""]]
-    @State private var currentPlayer = "X"
+    
+    @State private var tempX = ""
+    @State private var tempO = ""
+    
+    @State private var showSheet: Bool = true
+    
+    @State private var finalX = ""
+    @State private var finalO = ""
+    
+    @State private var currentPlayer = ""
     @State private var gameRunning = true
     @State private var winner = ""
+    
+    @Environment(\.colorScheme) var modee
     
     var body: some View {
         VStack {
@@ -29,7 +40,7 @@ struct TicTacToe: View {
                                 if gameOver(board: board) {
                                     gameRunning = false
                                 } else {
-                                    currentPlayer = currentPlayer == "X" ? "O" : "X"
+                                    currentPlayer = currentPlayer == finalX ? finalO : finalX
                                 }
                             }
                         }) {
@@ -39,9 +50,7 @@ struct TicTacToe: View {
                                 .background(Color.gray)
                                 .foregroundColor(.black)
                                 .cornerRadius(10)
-                        }
-                        
-                        
+                        }.disabled(!gameRunning || board[row][col] != "")
                     }
                 }
             }
@@ -55,11 +64,42 @@ struct TicTacToe: View {
                     .font(.system(size: 50, weight: .medium))
             }.padding()
         }.padding()
+            .sheet(isPresented: $showSheet) {
+                VStack {
+                    Text("Enter players name: ")
+                        .font(.title)
+                        .fontWeight(.bold)
+                    
+                    Text("Leave empty for default")
+                        .font(.headline)
+                    
+                    TextField("X", text: $tempX)
+                        .padding()
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .autocorrectionDisabled()
+                    
+                    TextField("O", text: $tempO)
+                        .padding()
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                        .autocorrectionDisabled()
+                    
+                    Button("Submit") {
+                        finalX = tempX.isEmpty ? "X" : tempX
+                        finalO = tempO.isEmpty ? "O" : tempO
+                        currentPlayer = finalX
+                        showSheet = false
+                    }
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+                }
+            }
     }
     
     func makeMove(row: Int, col: Int) {
         if board[row][col] == "" {
-            board[row][col] = currentPlayer
+            board[row][col] = currentPlayer == finalX ? "X" : "O"
         }
     }
     
@@ -80,7 +120,7 @@ struct TicTacToe: View {
         for condition in winConditions {
             let first = flatBoard[condition[0]]
             if first != "" && condition.allSatisfy({ flatBoard[$0] == first }) {
-                winner = first
+                winner = first == "X" ? finalX : finalO
                 return true
             }
         }
@@ -99,11 +139,13 @@ struct TicTacToe: View {
                  ["", "", ""]]
         
         winner = ""
+        showSheet = true
         gameRunning = true
-        currentPlayer = "X"
+        currentPlayer = finalX
     }
+
 }
 
 #Preview {
-    TicTacToe_()
+    TicTacToe()
 }
