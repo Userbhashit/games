@@ -17,11 +17,11 @@ struct gamesApp: App {
                 }
                 
                 Tab("Sent", systemImage: "tray.and.arrow.up.fill") {
-                    Developing()
+                    TicTacToe()
                 }
                 
                 Tab("History", systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90") {
-                    Developing()
+                    TicTacToe()
                 }
             }
         }
