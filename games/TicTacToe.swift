@@ -1,5 +1,5 @@
 //
-//  TicTacToe .swift
+//  TicTacToe.swift
 //  games
 //
 //  Created by Bhashit Gautam on 08/05/25.
@@ -23,7 +23,7 @@ struct TicTacToe: View {
     @State private var gameRunning = true
     @State private var winner = ""
     
-    @Environment(\.colorScheme) var modee
+    @Environment(\.modelContext) private var context
     
     var body: some View {
         VStack {
@@ -94,6 +94,7 @@ struct TicTacToe: View {
                     .foregroundColor(.white)
                     .cornerRadius(8)
                 }
+                .interactiveDismissDisabled(true)
             }
     }
     
@@ -121,12 +122,14 @@ struct TicTacToe: View {
             let first = flatBoard[condition[0]]
             if first != "" && condition.allSatisfy({ flatBoard[$0] == first }) {
                 winner = first == "X" ? finalX : finalO
+                saveGame("TicTacToe", "\(finalX.capitalized) VS \(finalO.capitalized)", winner)
                 return true
             }
         }
         
         if !flatBoard.contains("") {
             winner = "Draw"
+            saveGame("TicTacToe", "\(finalX.capitalized) VS \(finalO.capitalized)", "DRAW")
             return true
         }
         
@@ -143,7 +146,28 @@ struct TicTacToe: View {
         gameRunning = true
         currentPlayer = finalX
     }
-
+    
+    
+    func saveGame(_ game: String, _ player: String, _ winner: String) {
+        let timestamp = getCurrentLocalTime()
+        let toSave = Record(game, player, winner, timestamp)
+        context.insert(toSave)
+        do {
+            try context.save()
+        } catch {
+            print("Save failed: \(error.localizedDescription)")
+        }
+    }
+    
+    
+    func getCurrentLocalTime() -> String {
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        formatter.dateStyle = .long
+        formatter.timeZone = .current
+        return formatter.string(from: Date())
+    }
+    
 }
 
 #Preview {

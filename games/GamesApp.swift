@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct gamesApp: App {
@@ -21,9 +22,10 @@ struct gamesApp: App {
                 }
                 
                 Tab("History", systemImage: "clock.arrow.trianglehead.counterclockwise.rotate.90") {
-                    TicTacToe()
+                    History()
                 }
             }
+            .modelContainer(for: Record.self)
         }
     }
 }
